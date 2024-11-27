@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5433:5432"
+    volumes: 
+      - ./create_table_postgres.sql:/docker-entrypoint-initdb.d/create_table.sql
+
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    container_name: clickhouse_container
+    environment:
+      CLICKHOUSE_USER: admin
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_PASSWORD: password
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./create_table_clickhouse.sql:/docker-entrypoint-initdb.d/create_table.sql
+
